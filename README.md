@@ -20,7 +20,7 @@ Requirements: Docker Engine with the Compose plugin. PHP, Composer, Node.js, and
     cd DeskFlow
     docker compose up --build
 
-Open http://localhost:8000. Vite serves development assets on port 5173. PostgreSQL is available to host tools on port 5434 and is isolated in the deskflow_pgdata volume. The local-only database credentials are configured in Compose; change them before any deployment.
+Open http://localhost:8080. Vite serves development assets on port 5174. PostgreSQL is available to host tools on port 5434 and is isolated in the deskflow_pgdata volume. The local-only database credentials are configured in Compose; change them before any deployment.
 
 Run the test suite with:
 

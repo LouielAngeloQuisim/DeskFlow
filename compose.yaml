@@ -11,7 +11,7 @@ services:
       APP_NAME: DeskFlow
       APP_ENV: local
       APP_DEBUG: "true"
-      APP_URL: http://localhost:8000
+      APP_URL: http://localhost:8080
       DB_CONNECTION: pgsql
       DB_HOST: db
       DB_PORT: 5432
@@ -19,7 +19,7 @@ services:
       DB_USERNAME: deskflow
       DB_PASSWORD: deskflow_local
     ports:
-      - "8000:8000"
+      - "8080:8000"
     depends_on:
       db:
         condition: service_healthy
@@ -32,7 +32,7 @@ services:
       - deskflow_node_modules:/var/www/html/node_modules
     command: sh -lc "npm install && npm run dev -- --host=0.0.0.0"
     ports:
-      - "5173:5173"
+      - "5174:5173"
     depends_on:
       - app
 
