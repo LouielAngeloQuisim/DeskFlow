@@ -8,4 +8,4 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www/html
 
 EXPOSE 8000
-CMD ["sh", "-lc", "if [ ! -f .env ]; then cp .env.example .env; fi; git config --global --add safe.directory /var/www/html; if [ ! -f vendor/autoload.php ]; then composer install --no-scripts --no-interaction; php artisan package:discover --ansi; fi; if ! grep -q '^APP_KEY=base64:' .env; then php artisan key:generate --force; fi; php artisan migrate --force; php artisan serve --host=0.0.0.0 --port=8000"]
+CMD ["sh", "-lc", "if [ ! -f .env ]; then cp .env.example .env; fi; git config --global --add safe.directory /var/www/html; if [ ! -f vendor/autoload.php ]; then composer install --no-scripts --no-interaction; php artisan package:discover --ansi; fi; if ! grep -q '^APP_KEY=base64:' .env; then php artisan key:generate --force; fi; php artisan migrate --force; php artisan db:seed --force; php artisan serve --host=0.0.0.0 --port=8000"]

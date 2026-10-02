@@ -74,3 +74,12 @@ The first complete portfolio release will not include email delivery, file uploa
 - All customer-visible queries scope by authenticated owner, even when a policy also protects the individual record.
 - Internal notes are hidden at the query/render boundary for customers and covered by regression tests.
 - Use database transactions when a ticket state change also creates a timeline entry.
+## Delivery status
+
+- [x] Phase 1 — Baseline and plan committed before implementation.
+- [x] Phase 2 — Customer/support roles, ticket schema, policies, and internal notes.
+- [x] Phase 3 — DeskFlow landing/auth branding; new accounts can reach the portal without email delivery.
+- [x] Phase 4 — Customer dashboard, ticket submission, search, conversation, and reply flow.
+- [x] Phase 5 — Staff queue, assignment, status/priority updates, public replies, and internal notes.
+- [x] Phase 6 — Categories, opt-in demo seeder, agent provisioning command, responsive UI, and documentation.
+- [ ] Phase 7 — Local SQLite/PostgreSQL checks pass; verify the final pushed GitHub Actions run before marking delivery complete.

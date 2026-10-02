@@ -1,18 +1,18 @@
-<x-layouts::app :title="__('Dashboard')">
-    <div class="flex h-full w-full flex-1 flex-col gap-4 rounded-xl">
-        <div class="grid auto-rows-min gap-4 md:grid-cols-3">
-            <div class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
-            </div>
-            <div class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
-            </div>
-            <div class="relative aspect-video overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-                <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
-            </div>
-        </div>
-        <div class="relative h-full flex-1 overflow-hidden rounded-xl border border-neutral-200 dark:border-neutral-700">
-            <x-placeholder-pattern class="absolute inset-0 size-full stroke-gray-900/20 dark:stroke-neutral-100/20" />
-        </div>
+<x-layouts::app :title="__('Overview')">
+    @php($staff = auth()->user()->isStaff())
+    <div class="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
+        <div><p class="text-sm font-semibold text-indigo-600">{{ $staff ? 'SUPPORT WORKSPACE' : 'YOUR SUPPORT SPACE' }}</p><h1 class="mt-2 text-3xl font-semibold tracking-tight text-slate-950">{{ $staff ? 'Good to see you, '.auth()->user()->name.'.' : 'How can we help, '.auth()->user()->name.'?' }}</h1><p class="mt-2 text-slate-500">{{ $staff ? 'Here’s what needs attention from the team.' : 'Your requests and conversations, all in one place.' }}</p></div>
+        @if(! $staff)<a href="{{ route('tickets.create') }}" class="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700" wire:navigate><span class="text-lg leading-none">＋</span> New request</a>@else<a href="{{ route('agent.queue') }}" class="rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white hover:bg-indigo-700" wire:navigate>Open support queue →</a>@endif
     </div>
+    <div class="mt-8 grid gap-4 sm:grid-cols-3">
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"><div class="flex items-center justify-between"><p class="text-sm font-medium text-slate-500">Active requests</p><span class="rounded-lg bg-indigo-50 px-2.5 py-1.5 text-indigo-600">◷</span></div><p class="mt-4 text-3xl font-semibold tracking-tight">{{ $counts['open'] }}</p><p class="mt-1 text-xs text-slate-500">{{ $staff ? 'Across all customers' : 'Currently being worked on' }}</p></div>
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"><div class="flex items-center justify-between"><p class="text-sm font-medium text-slate-500">Waiting on you</p><span class="rounded-lg bg-amber-50 px-2.5 py-1.5 text-amber-700">!</span></div><p class="mt-4 text-3xl font-semibold tracking-tight">{{ $counts['waiting'] }}</p><p class="mt-1 text-xs text-slate-500">{{ $staff ? 'Awaiting customer reply' : 'A reply would help us move forward' }}</p></div>
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"><div class="flex items-center justify-between"><p class="text-sm font-medium text-slate-500">Resolved</p><span class="rounded-lg bg-emerald-50 px-2.5 py-1.5 text-emerald-700">✓</span></div><p class="mt-4 text-3xl font-semibold tracking-tight">{{ $counts['resolved'] }}</p><p class="mt-1 text-xs text-slate-500">Successfully taken care of</p></div>
+    </div>
+    <section class="mt-9 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="flex items-center justify-between border-b border-slate-100 px-5 py-5 sm:px-6"><div><h2 class="font-semibold text-slate-950">{{ $staff ? 'Recently updated' : 'Recent requests' }}</h2><p class="mt-1 text-sm text-slate-500">{{ $staff ? 'Latest activity across the help desk' : 'A quick look at your latest activity' }}</p></div><a href="{{ $staff ? route('agent.queue') : route('tickets.index') }}" class="text-sm font-semibold text-indigo-600 hover:text-indigo-700" wire:navigate>View all <span aria-hidden="true">→</span></a></div>
+        @if($tickets->isEmpty())
+            <div class="px-6 py-14 text-center"><span class="mx-auto flex size-14 items-center justify-center rounded-2xl bg-indigo-50 text-2xl text-indigo-600">✳</span><h3 class="mt-4 font-semibold">{{ $staff ? 'Your queue is clear' : 'No support requests yet' }}</h3><p class="mx-auto mt-2 max-w-sm text-sm leading-6 text-slate-500">{{ $staff ? 'New customer requests will appear here as soon as they arrive.' : 'When something comes up, start a request and your support team will take it from there.' }}</p>@if(! $staff)<a href="{{ route('tickets.create') }}" class="mt-5 inline-flex rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold hover:bg-slate-50" wire:navigate>Create your first request</a>@endif</div>
+        @else<div class="divide-y divide-slate-100">@foreach($tickets as $ticket)<a href="{{ route('tickets.show', $ticket->reference) }}" class="flex flex-col gap-3 px-5 py-4 transition hover:bg-slate-50 sm:flex-row sm:items-center sm:px-6" wire:navigate><div class="flex size-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-600">↗</div><div class="min-w-0 flex-1"><div class="flex flex-wrap items-center gap-2"><span class="text-xs font-semibold text-slate-400">{{ $ticket->reference }}</span><span class="text-xs text-slate-300">·</span><span class="text-xs text-slate-500">{{ $ticket->category?->name ?? 'General' }}</span></div><p class="mt-1 truncate text-sm font-semibold text-slate-900">{{ $ticket->subject }}</p>@if($staff)<p class="mt-1 text-xs text-slate-500">{{ $ticket->requester->name }}</p>@endif</div><span class="w-fit rounded-full px-3 py-1 text-xs font-semibold {{ $ticket->status->value === 'resolved' || $ticket->status->value === 'closed' ? 'bg-emerald-50 text-emerald-700' : ($ticket->status->value === 'waiting_on_customer' ? 'bg-amber-50 text-amber-700' : 'bg-indigo-50 text-indigo-700') }}">{{ $ticket->status->label() }}</span><span class="hidden w-28 text-right text-xs text-slate-400 sm:block">{{ $ticket->updated_at->diffForHumans() }}</span></a>@endforeach</div>@endif
+    </section>
 </x-layouts::app>

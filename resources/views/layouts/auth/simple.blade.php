@@ -1,20 +1,19 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
-        @include('partials.head')
+        @include('partials.auth-head')
     </head>
-    <body class="min-h-screen bg-white antialiased dark:bg-linear-to-b dark:from-neutral-950 dark:to-neutral-900">
-        <div class="bg-background flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
-            <div class="flex w-full max-w-sm flex-col gap-2">
-                <a href="{{ route('home') }}" class="flex flex-col items-center gap-2 font-medium" wire:navigate>
-                    <span class="flex h-9 w-9 mb-1 items-center justify-center rounded-md">
-                        <x-app-logo-icon class="size-9 fill-current text-black dark:text-white" />
-                    </span>
-                    <span class="sr-only">{{ config('app.name', 'Laravel') }}</span>
+    <body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
+        <div class="flex min-h-svh flex-col items-center justify-center gap-6 bg-[radial-gradient(ellipse_at_top,_rgba(99,102,241,0.1),_transparent_55%)] p-5 sm:p-8">
+            <div class="w-full max-w-md">
+                <a href="{{ route('home') }}" class="mx-auto mb-6 flex w-fit items-center gap-3" wire:navigate>
+                    <span aria-hidden="true" class="flex size-10 items-center justify-center rounded-2xl bg-indigo-600 text-lg font-black text-white shadow-sm">D</span>
+                    <span class="text-lg font-bold tracking-tight text-slate-900">DeskFlow</span>
                 </a>
-                <div class="flex flex-col gap-6">
+                <div class="rounded-3xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-200/60 sm:p-8">
                     {{ $slot }}
                 </div>
+                <p class="mt-6 text-center text-xs text-slate-400">Support, in motion.</p>
             </div>
         </div>
 

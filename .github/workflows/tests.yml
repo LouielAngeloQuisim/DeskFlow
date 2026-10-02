@@ -57,3 +57,5 @@ jobs:
 
       - name: Run CI Checks
         run: composer ci:check
+      - name: Run PostgreSQL integration tests
+        run: ./vendor/bin/phpunit
