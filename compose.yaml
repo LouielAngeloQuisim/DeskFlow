@@ -1,0 +1,58 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+      - deskflow_vendor:/var/www/html/vendor
+    environment:
+      APP_NAME: DeskFlow
+      APP_ENV: local
+      APP_DEBUG: "true"
+      APP_URL: http://localhost:8000
+      DB_CONNECTION: pgsql
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_DATABASE: deskflow
+      DB_USERNAME: deskflow
+      DB_PASSWORD: deskflow_local
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  frontend:
+    image: node:24-alpine
+    working_dir: /var/www/html
+    volumes:
+      - .:/var/www/html
+      - deskflow_node_modules:/var/www/html/node_modules
+    command: sh -lc "npm install && npm run dev -- --host=0.0.0.0"
+    ports:
+      - "5173:5173"
+    depends_on:
+      - app
+
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: deskflow
+      POSTGRES_USER: deskflow
+      POSTGRES_PASSWORD: deskflow_local
+    ports:
+      - "5434:5432"
+    volumes:
+      - deskflow_pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U deskflow -d deskflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  deskflow_vendor:
+  deskflow_node_modules:
+  deskflow_pgdata:
